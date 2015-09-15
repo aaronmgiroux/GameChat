@@ -1,7 +1,7 @@
 html {
-    padding: 10px;
+    padding: 0px;
     font-family: Verdana, sans-serif;
-}
+}h1{		margin: 0px;}
 
 .login-buttons-dropdown-align-right {
     float: right;	vertical-align: middle;	margin-right: 10px;
@@ -109,9 +109,9 @@ html {
 
     #wrapper.toggled #sidebar-wrapper {
         width: 0;
-    }    		#header-content-wrapper {		top: 0;        padding: 0px;		height: 150px;		background: #cccccc;    }		#main-menu-content-wrapper {        height: 36px;		background: #3b3b3b;    }
+    }    		#header-content-wrapper {		width: 100%;		top: 0;        padding: 0px;		height: 150px;		background: #cccccc;    }		#main-menu-content-wrapper {        height: 36px;		background: #3b3b3b;    }
     #wrapper.toggled #page-content-wrapper {
         position: relative;
         margin-right: 0;
-    }		#page-content-wrapper {        padding: 10px 0 0 0;    }		#message-content-wrapper {        height: 500px;		width: 100%;		border-style: solid;		border-width: 2px;		border-color: #cccccc;		overflow: hidden;		overflow:scroll;    }		#input-content-wrapper {        height: 36px;		background: #cccccc;    }
+    }		#page-content-wrapper {        padding: 10px;    }		#message-content-wrapper {	        height: 520px;		width: 100%;		border-style: solid;		border-width: 2px;		border-color: #cccccc;		overflow: auto;		overflow:scroll;    }		#input-content-wrapper {        height: 36px;		background: #cccccc;    }
 }
