@@ -11,7 +11,7 @@ html {
  * Start Bootstrap - Simple Sidebar HTML Template (http://startbootstrap.com)
  * Code licensed under the Apache License v2.0.
  * For details, see http://www.apache.org/licenses/LICENSE-2.0.
- */  /* NavBar Styles */ .navbar-inverse {    background-color: #222;    border-color: #080808;}.navbar {    border-radius: 0px;	position: relative;    min-height: 50px;    margin-bottom: 0px;    border: 1px solid transparent;	overflow: visible;}.navbar .nav {    position: relative;    left: 0;    display: block;    float: left;    /* margin: 0 10px 0 0; */}.navbar-collapse{	padding-left: 8px;}.nav {	position: relative;    left: 0;    display: block;    float: left;    margin: 6px 10px 0 0;}
+ */  /* NavBar Styles */ .navbar-inverse {    background-color: #222;    border-color: #080808;}.navbar {    border-radius: 0px;	position: relative;    min-height: 50px;    margin-bottom: 0px;    border: 1px solid transparent;	overflow: visible;}.navbar .nav {    position: relative;    left: 0;    display: block;    float: left;    /* margin: 0 10px 0 0; */}.navbar-collapse{	padding-left: 7px;}.nav {	position: relative;    left: 0;    display: block;    float: left;    margin: 7px 10px 0 0;}
 /* Toggle Styles */
 #wrapper {
     padding-left: 0;
