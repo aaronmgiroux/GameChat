@@ -108,5 +108,5 @@ html {
     #wrapper.toggled #page-content-wrapper {
         position: relative;
         margin-right: 0;
-    }		#sidebar-content-wrapper {        margin-right: 10px;    }		#message-content-wrapper {	        height: 505px;		margin: 10px 10px 0 0;		border-style: solid;		border-width: 2px;		border-color: #cccccc;		overflow: auto;		overflow:scroll;    }		#input-content-wrapper {        height: 36px;		background: #cccccc;		margin-left: 260px;		margin-right: 10px;    }
+    }		#page-content-wrapper{			padding-top: 10px;		}		#sidebar-content-wrapper {        margin-right: 10px;    }		#message-content-wrapper {	        height: 505px;		margin: 0 10px 0 0;		border-style: solid;		border-width: 2px;		border-color: #cccccc;		overflow: auto;		overflow:scroll;    }		#input-content-wrapper {        height: 36px;		background: #cccccc;		margin-left: 260px;		margin-right: 10px;    }
 }
