@@ -27,7 +27,7 @@ html {
     z-index: 1000;
     left: 250px;
     width: 0;
-    height: 570px;
+    height: 800px;
     margin-left: 0px;
     overflow-y: auto;
     background: #000;
@@ -47,7 +47,7 @@ html {
 /* Sidebar Styles */
 .sidebar-nav {
     top: 0;
-    width: 250px;	height: 250px;
+    width: 250px;	height: 400px;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -104,7 +104,7 @@ html {
 
     #wrapper.toggled #sidebar-wrapper {
         width: 0;
-    }    		#header-content-wrapper {		width: 100%;		top: 0;        padding: 0px;		margin: auto;		height: 150px;		background: #cccccc;    }		#main-menu-content-wrapper {        height: 36px;		background: #3b3b3b;    }
+    }    		#header-content-wrapper {		width: 100%;		top: 0;        padding: 0px;		margin: auto;		height: 150px;		background: #cccccc;    }		#footer-content-wrapper {		width: 100%;		bottom: 0;        padding: 0px;		margin: auto;		height: 150px;		background: #cccccc;    }		#footer-text{			padding: 110px 0 0 0;		text-align: center;		}		#main-menu-content-wrapper {        height: 36px;		background: #3b3b3b;    }
     #wrapper.toggled #page-content-wrapper {
         position: relative;
         margin-right: 0;
