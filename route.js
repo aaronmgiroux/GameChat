@@ -13,3 +13,8 @@ Router.route('/chatrooms', function () {
   this.render('roompage');
   this.layout('mainNav');
 });
+
+Router.route('/chatroomscreate', function () {
+  this.render('roomcreatepage');
+  this.layout('mainNav');
+});
