@@ -2,16 +2,16 @@ html {
     padding: 0px;
     font-family: Verdana, sans-serif;
 }h1{		margin: 0px;}
-
+/*Log in buttons*/
 .login-buttons-dropdown-align-right {
     float: right;	vertical-align: middle;	margin-right: 10px;
-}
+}#login-buttons a, .accounts-dialog a {    cursor: pointer;    text-decoration: underline;    color: #000;}#login-buttons .login-button, .accounts-dialog .login-button {    cursor: pointer;    -webkit-user-select: none;    -moz-user-select: none;    -ms-user-select: none;    -o-user-select: none;    user-select: none;    padding: 4px 8px;    font-size: 80%;    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;    line-height: 1.5;    text-align: center;    color: #fff;    background: #9a7d3d;    border: 1px solid #8c7137;    border-radius: 4px;}#login-buttons .login-button:hover, .accounts-dialog .login-button:hover, .configure-button :hover{    background: #be9a4c;	border-color: #9a7d3d;}#login-buttons .configure-button {    background: #9a7d3d;    border-color: #9a7d3d;}
 
 /*!
  * Start Bootstrap - Simple Sidebar HTML Template (http://startbootstrap.com)
  * Code licensed under the Apache License v2.0.
  * For details, see http://www.apache.org/licenses/LICENSE-2.0.
- */  /* NavBar Styles */ .navbar-inverse {    background-color: #222;    border-color: #080808;}.navbar {    border-radius: 0px;	position: relative;    min-height: 50px;    margin-bottom: 0px;    border: 1px solid transparent;	overflow: visible;}.navbar .nav {    position: relative;    left: 0;    display: block;    float: left;    margin: 5px;}.navbar-collapse{	padding-left: 0;}.nav {	position: relative;    left: 0;    display: block;    float: left;    margin: 5px 10px 0 0;}
+ */  /* NavBar Styles */ .navbar-inverse {    background-color: #9a7d3d;    border-color: #080808;}.navbar {	border-radius: 0px;	position: relative;    min-height: 50px;    margin-bottom: 0px;	overflow: visible;}.navbar .nav {    position: relative;    left: 0;    display: block;    float: left;    margin: 5px;}.navbar-collapse{	padding-left: 0;}.nav {	position: relative;    left: 0;    display: block;    float: left;    margin: 5px 10px 0 0;}.navbar-inverse .navbar-nav> li >a {    color: #fff;}
 /* Toggle Styles */
 #wrapper {
     padding-left: 0;
@@ -27,7 +27,7 @@ html {
     z-index: 1000;
     left: 250px;
     width: 0;
-    height: 800px;
+    height: 1200px;
     margin-left: 0px;
     overflow-y: auto;
     background: #000;
@@ -47,7 +47,7 @@ html {
 /* Sidebar Styles */
 .sidebar-nav {
     top: 0;
-    width: 250px;	height: 380px;
+    width: 250px;	height: 400px;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -104,9 +104,9 @@ html {
 
     #wrapper.toggled #sidebar-wrapper {
         width: 0;
-    }    		#header-content-wrapper {		width: 100%;		top: 0;        padding: 0px;		margin: auto;		height: 150px;		background: #cccccc;    }		#footer-content-wrapper {		width: 100%;		bottom: 0;        padding: 0px;		margin: auto;		height: 150px;		background: #cccccc;    }		#footer-text{			padding: 110px 0 0 0;		text-align: center;		}		#main-menu-content-wrapper {        height: 36px;		background: #3b3b3b;    }
+    }    		#header-content-wrapper {		width: 100%;		top: 0;        padding: 0px;		margin: auto;		height: 150px;		background: #000;    }		#footer-content-wrapper {		width: 100%;		bottom: 0;        padding: 0px;		margin: auto;		height: 150px;		background: #9a7d3d;    }		#footer-text{			padding: 110px 0 0 0;		text-align: center;		}		#main-menu-content-wrapper {        height: 36px;		background: #3b3b3b;    }
     #wrapper.toggled #page-content-wrapper {
         position: relative;
         margin-right: 0;
-    }		#page-content-wrapper{			padding-top: 10px;		}		#sidebar-content-wrapper {        margin-right: 10px;    }		#message-content-wrapper {	        height: 505px;		margin: 0 10px 0 0;		border-style: solid;		border-width: 2px;		border-color: #cccccc;		overflow: auto;		overflow:scroll;    }		#input-content-wrapper {        height: 36px;		background: #cccccc;		margin-left: 260px;		margin-right: 10px;    }
+    }		#page-content-wrapper{			padding-top: 10px;		}		#sidebar-content-wrapper {        margin-right: 10px;    }		#message-content-wrapper {	        height: 505px;		margin: 0 10px 0 0;		border-style: solid;		border-width: 2px;		border-color: #cccccc;		overflow: auto;		overflow:scroll;    }		#input-content-wrapper {        height: 36px;		background: #cccccc;		margin-left: 260px;		margin-right: 10px;    }		#dashboard-content-wrapper {	        height: 780px;		margin: 0 10px 0 0;    }
 }
