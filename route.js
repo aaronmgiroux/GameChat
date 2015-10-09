@@ -7,8 +7,7 @@ Router.route('/', function () {
   this.render('homepage');
   this.layout('mainNav');
 });
- 
- 
+
 Router.route('/chatrooms', function () {
   this.render('roompage');
   this.layout('mainNav');
@@ -21,5 +20,10 @@ Router.route('/chatroomscreate', function () {
 
 Router.route('/dashboard', function () {
   this.render('dashboardpage');
+  this.layout('mainNav');
+});
+
+Router.route('/invites', function () {
+  this.render('invitespage');
   this.layout('mainNav');
 });
