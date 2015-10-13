@@ -8,6 +8,11 @@ Router.route('/', function () {
   this.layout('mainNav');
 });
 
+Router.route('/games', function () {
+  this.render('gamespage');
+  this.layout('mainNav');
+});
+
 Router.route('/chatrooms', function () {
   this.render('roompage');
   this.layout('mainNav');
