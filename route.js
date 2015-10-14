@@ -23,6 +23,11 @@ Router.route('/chatroomscreate', function () {
   this.layout('mainNav');
 });
 
+Router.route('/chatroomsadmin', function () {
+  this.render('roomadminpage');
+  this.layout('mainNav');
+});
+
 Router.route('/dashboard', function () {
   this.render('dashboardpage');
   this.layout('mainNav');

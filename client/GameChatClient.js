@@ -80,7 +80,7 @@ GameChatClient = {
      * @param {String} inviteMessage - Message to display in invite
      * @returns {Number} ID of new ChatRoomInvites doc
      */
-    inviteUserToChatRoom: function (userId, chatRoomId, inviteMessage) {
+    inviteUserToChatRoom: function (userId, chatRoomId) {
         // First put the user into the REGULAR list
         console.log(
             "inviteUserToChatRoom(): Calling setUserChatRoomAccessLevel "
@@ -106,7 +106,7 @@ GameChatClient = {
             + " for chatRoomId "
             + chatRoomId
         );
-        GameChatClient.createChatRoomInvite(userId, chatRoomId, inviteMessage)
+        GameChatClient.createChatRoomInvite(userId, chatRoomId)
     },
 
     /* Chatroom/invite creation functions */
@@ -118,10 +118,10 @@ GameChatClient = {
      * and sends a ChatRoomInvite to those users.
      * @param {String} roomname - Name of chat room
      * @param {Map} users - usersAccess Map of user ID keys/access values to allow into chat room
-     * @param {String} inviteMessage - Message to display in chat room invite
+     * @param {Map} flags - Configuration options for chatroom (isPublic, etc.)
      * @returns {Number} ID of ChatRooms doc
      */
-    createChatRoom: function (roomname, users, inviteMessage) {
+    createChatRoom: function (roomname, users, flags) {
 
         var usersArray = [];
 
@@ -141,9 +141,10 @@ GameChatClient = {
         newChatRoomId = ChatRooms.insert({
             adminId: Meteor.userId(),
             roomname: roomname,
-            isPublic: false,
+            isPublic: flags.get('isPublic'),
             accessRegular:[],
             accessBanned:[],
+            invited:[],
             messages:[]
         });
 
@@ -154,7 +155,6 @@ GameChatClient = {
         console.log("createChatRoom(): Creating access levels and invites");
 
         // TODO Change this to also use values in Map 'users' to set user permissions
-        // TODO Add inviter message functionality
         // Create chat room user access levels and invites
         for (var i = 0; i < usersArray.length; i++) {
              GameChatClient.setUserChatRoomAccessLevel(
@@ -167,8 +167,7 @@ GameChatClient = {
                 = GameChatClient
                 .createChatRoomInvite(
                 usersArray[i][0],
-                newChatRoomId,
-                inviteMessage
+                newChatRoomId
             );
             console.log("Access level for userId "
                 + usersArray[i][0]
@@ -255,17 +254,18 @@ GameChatClient = {
      * Create chat room invite for user
      * @param {Number} userId - ID of user
      * @param {Number} chatRoomId - ID of chat room
-     * @param {String} inviteMessage - Message to display in invite
      * @returns {Number} ID of new ChatRoomInvites doc
      */
-    createChatRoomInvite: function (userId, chatRoomId, inviteMessage) {
+    createChatRoomInvite: function (userId, chatRoomId) {
         var inviterName = Meteor.user().username;
+        if (ChatRooms.findOne(chatRoomId).invited.indexOf(userId) === -1) {
+            ChatRooms.update(chatRoomId, {$push:{invited:userId}});
+        }
         return ChatRoomsInvites
             .insert({
                 userId: userId,
                 chatRoomId: chatRoomId,
-                inviterName: inviterName,
-                inviteMessage: inviteMessage
+                inviterName: inviterName
             }
         );
     },

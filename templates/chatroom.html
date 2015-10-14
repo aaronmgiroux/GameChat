@@ -46,17 +46,21 @@
 
 				<p style=" padding: 5px 0 0 5px">New room name: <input style="width:500px" type="text" id="newroomname"></p>
 
-				<p style=" padding: 5px 0 0 5px">Invite Message: <input style="width:500px" type="text" id="newroommessage"></p>
+				<p style=" padding: 5px 0 0 5px">
+                    <li class="{{#if publicchecked}}publicchecked{{/if}}">
+                    Public: <input type="checkbox" checked={{publicchecked}} class="toggle-public-checked" />
+                    </li>
+                </p>
 
 				<p style=" padding: 5px 0 0 5px">Invite users:</p>
 
 				{{#each onlusr}}
 
-					<li class="{{#if checked}}checked{{/if}}">
+					<li class="{{#if userchecked}}userchecked{{/if}}">
 
-						<input type="checkbox" checked={{checked}} class="toggle-checked" />
+                        <span class="text">{{username}}</span>
 
-						<span class="text">{{username}}</span>
+						<input type="checkbox" checked={{userchecked}} class="toggle-user-checked" />
 
 					</li>
 
@@ -70,9 +74,78 @@
     </div>
 </template>
 
+<template name="roomadminpage">
+    <div id="wrapper">
+
+		<div id="page-content-wrapper">
+
+			<div id="sidebar-content-wrapper">
+
+				{{> sidebar }}
+
+			</div>
+
+			<div id="dashboard-content-wrapper">
+
+				<h1>Access Control</h1>
+				<hr>
+
+                <h4>Allowed Users</h4>
+                {{#each allowedcurrentusr}}
+                    {{> allowedcurrentusrctl}}
+                {{/each}}
+
+                <h4>Uninvited Users</h4>
+                {{#each uninvitedcurrentusr}}
+                        {{> uninvitedcurrentusrctl}}
+                {{/each}}
+
+                <h4>Banned Users</h4>
+                {{#each bannedcurrentusr}}
+                        {{> bannedcurrentusrctl}}
+                {{/each}}
+
+				<a href="/" class="backtochat">Back to Chat Room</a>
+
+			</div>
+		</div>
+
+    </div>
+</template>
+
 <!-- List templates -->
 <template name="roomlink">
 
     <li class="room"><a href='/'>{{roomname}}</a></li>
+
+</template>
+
+<template name="allowedcurrentusrctl">
+
+    <li class="allowedusritem">
+        <p>
+            {{username}} <input type="button" class="banuser" value="Ban"/>
+        </p>
+    </li>
+
+</template>
+
+<template name="uninvitedcurrentusrctl">
+
+    <li class="allowedusritem">
+        <p>
+            {{username}} <input type="button" class="inviteuser" value="Invite"/>
+        </p>
+    </li>
+
+</template>
+
+<template name="bannedcurrentusrctl">
+
+    <li class="allowedusritem">
+        <p>
+            {{username}} <input type="button" class="unbanuser" value="Unban"/>
+        </p>
+    </li>
 
 </template>
