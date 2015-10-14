@@ -1,0 +1,40 @@
+<template name="invitespage">
+    <div id="wrapper">
+
+		<div id="page-content-wrapper">
+
+			<div id="sidebar-content-wrapper">
+
+				{{> sidebar }}
+
+			</div>
+
+			<div id="dashboard-content-wrapper">
+
+				<h1>Invites</h1>
+				<hr>
+
+                <ul>
+                    {{#each chatroomsinvite}}
+                        {{> invitelink}}
+                    {{/each}}
+                </ul>
+
+			</div>
+
+		</div>
+
+	</div>
+</template>
+
+<template name="invitelink">
+
+    <li class="invite">
+        <p>
+            {{inviterName}} says: {{inviteMessage}}
+            <a href="/" class="acceptinvite">Accept</a>
+            <a href="/invites" class="declineinvite">Decline</a>
+        </p>
+    </li>
+
+</template>

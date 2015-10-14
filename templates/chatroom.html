@@ -1,0 +1,78 @@
+<template name="roompage">
+	<div id="wrapper">	
+	
+		<div id="page-content-wrapper">		
+	
+			<div id="sidebar-content-wrapper">
+
+					{{> sidebar }}
+				
+			</div>
+			
+			<div id="dashboard-content-wrapper">		
+			
+				<h1>Chat Rooms</h1>
+				<hr>
+
+                <ul>
+                    {{#each chatrooms}}
+                        {{> roomlink}}
+                    {{/each}}
+                </ul>
+
+                <p> <a href="/chatroomscreate">New Chat Room</a> </p>
+
+			</div>	
+		</div>
+		
+	</div>
+</template>
+
+<template name="roomcreatepage">
+    <div id="wrapper">
+	
+		<div id="page-content-wrapper">
+
+			<div id="sidebar-content-wrapper">
+
+				{{> sidebar }}
+
+			</div>
+
+			<div id="dashboard-content-wrapper">
+			
+				<h1>Create Chat Room</h1>
+				<hr>
+
+				<p style=" padding: 5px 0 0 5px">New room name: <input style="width:500px" type="text" id="newroomname"></p>
+
+				<p style=" padding: 5px 0 0 5px">Invite Message: <input style="width:500px" type="text" id="newroommessage"></p>
+
+				<p style=" padding: 5px 0 0 5px">Invite users:</p>
+
+				{{#each onlusr}}
+
+					<li class="{{#if checked}}checked{{/if}}">
+
+						<input type="checkbox" checked={{checked}} class="toggle-checked" />
+
+						<span class="text">{{username}}</span>
+
+					</li>
+
+				{{/each}}
+
+				<a href="/chatrooms" class="createroom">Create Room</a>
+
+			</div>
+		</div>
+
+    </div>
+</template>
+
+<!-- List templates -->
+<template name="roomlink">
+
+    <li class="room"><a href='/'>{{roomname}}</a></li>
+
+</template>

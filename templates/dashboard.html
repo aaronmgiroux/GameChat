@@ -1,0 +1,44 @@
+<template name="dashboardpage">
+    <div id="wrapper">		
+
+		<div id="page-content-wrapper">		
+		
+			<div id="sidebar-content-wrapper">
+
+				{{> sidebar }}
+			
+			</div>
+		
+			<div id="dashboard-content-wrapper">	
+
+				<h1>Dashboard</h1>
+				<hr>
+				
+				<h3>All Users</h3>
+				<div id="dashboard-list-wrapper">
+					<ul>
+						{{#each user}}
+							{{> user_item}}
+						{{/each}}
+					</ul>
+				</div>
+				<h3>All Games</h3>
+				<div id="dashboard-list-wrapper">
+					
+				</div>
+			</div>
+
+		</div>		
+
+	</div>
+</template>
+
+<template name="user_item">
+    <li class="user-item">		
+		<p>
+			<b>User Id: </b>{{_id}}		
+			<b>User Name: </b>{{username}}		
+			<a href="/dashboard" class="deleteuser">Delete</a>
+		</p>
+    </li>
+</template>
