@@ -18,3 +18,56 @@
 		</div>
 	</div>
 </template>
+
+<template name="gamescreatepage">
+	<div id="wrapper">		
+
+		<div id="page-content-wrapper">		
+		
+			<div id="sidebar-content-wrapper">
+
+				{{> sidebar }}
+			
+			</div>
+		
+			<div id="dashboard-content-wrapper">	
+
+				<h1>Games</h1>
+				<hr>
+				
+				<table>
+					<tr>
+						<td>
+							<p style=" padding: 5px 0 0 5px">Game Title: </p>
+						</td>
+						<td>
+							<input style="width:500px" type="text" id="newgamename">
+						</td>
+						
+					</tr>
+					<tr>
+						<td>
+							<p style=" padding: 5px 0 0 5px">Game Description: </p>
+						</td>
+						<td>
+							<input style="width:500px" type="text" id="newgamedescription">
+						</td>
+					</tr>
+					<tr>
+						<td>
+						<p style=" padding: 5px 0 0 5px">Game URL: </p>
+						</td>
+						<td>
+							<input style="width:500px" type="text" id="newgameurl">
+						</td>
+					</tr>
+					<tr>
+						<a href="/dashboard" class="creategame">Create Game</a>
+					</tr>
+				</table>
+			
+			</div>
+		</div>
+	</div>
+
+</template>

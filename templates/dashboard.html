@@ -22,15 +22,30 @@
 						{{/each}}
 					</ul>
 				</div>
-				<h3>All Games</h3>
+					<h3>All Games ( {{gamecount}} )</h3>				
 				<div id="dashboard-list-wrapper">
-					
+					<ul class="games">
+						{{#each game}}
+							{{> game_item}}
+						{{/each}}
+					</ul>
 				</div>
+				<p> <a href="/gamescreate">Add New Game</a></p>
 			</div>
 
 		</div>		
 
 	</div>
+</template>
+
+<template name="game_item">
+    <li class="user-item">		
+		<p>
+			Game Id: <b>{{_id}}		</b>
+			Game Name: <b>{{gameName}}		</b>
+			<a href="/dashboard" class="deletegame">Delete</a>
+		</p>
+    </li>
 </template>
 
 <template name="user_item">

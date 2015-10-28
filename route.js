@@ -13,6 +13,11 @@ Router.route('/games', function () {
   this.layout('mainNav');
 });
 
+Router.route('/gamescreate', function () {
+  this.render('gamescreatepage');
+  this.layout('mainNav');
+});
+
 Router.route('/chatrooms', function () {
   this.render('roompage');
   this.layout('mainNav');

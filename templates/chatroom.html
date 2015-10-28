@@ -13,15 +13,15 @@
 			
 				<h1>Chat Rooms</h1>
 				<hr>
-
-                <ul>
-                    {{#each chatrooms}}
-                        {{> roomlink}}
-                    {{/each}}
-                </ul>
-
-                <p> <a href="/chatroomscreate">New Chat Room</a> </p>
-
+				<div id="dashboard-list-wrapper">
+					<ul>
+						{{#each chatrooms}}
+							{{> roomlink}}
+						{{/each}}
+					</ul>						
+				</div>
+				
+				<p> <a href="/chatroomscreate">New Chat Room</a> </p>
 			</div>	
 		</div>
 		
@@ -43,31 +43,37 @@
 			
 				<h1>Create Chat Room</h1>
 				<hr>
-
+				<table>
+				<tr>
 				<p style=" padding: 5px 0 0 5px">New room name: <input style="width:500px" type="text" id="newroomname"></p>
-
+				</tr>
+				<tr>
 				<p style=" padding: 5px 0 0 5px">
                     <li class="{{#if publicchecked}}publicchecked{{/if}}">
                     Public: <input type="checkbox" checked={{publicchecked}} class="toggle-public-checked" />
                     </li>
                 </p>
-
+				</tr>
+				<tr>
 				<p style=" padding: 5px 0 0 5px">Invite users:</p>
-
+				</tr>
 				{{#each onlusr}}
+					<tr>
 
 					<li class="{{#if userchecked}}userchecked{{/if}}">
 
-                        <span class="text">{{username}}</span>
+                        <td><span class="text">{{username}}</span></td>
 
-						<input type="checkbox" checked={{userchecked}} class="toggle-user-checked" />
+						<td><input type="checkbox" checked={{userchecked}} class="toggle-user-checked" /></td>
 
 					</li>
+					</tr>
 
 				{{/each}}
-
+				<tr>
 				<a href="/chatrooms" class="createroom">Create Room</a>
-
+				</tr>
+				</table>
 			</div>
 		</div>
 
@@ -89,21 +95,43 @@
 
 				<h1>Access Control</h1>
 				<hr>
-
-                <h4>Allowed Users</h4>
-                {{#each allowedcurrentusr}}
-                    {{> allowedcurrentusrctl}}
-                {{/each}}
-
-                <h4>Uninvited Users</h4>
-                {{#each uninvitedcurrentusr}}
-                        {{> uninvitedcurrentusrctl}}
-                {{/each}}
-
-                <h4>Banned Users</h4>
-                {{#each bannedcurrentusr}}
-                        {{> bannedcurrentusrctl}}
-                {{/each}}
+				
+				<table>
+					<tr>
+						<td>
+							<h4>Allowed Users</h4>
+						</td>
+						<td>
+							<h4>Uninvited Users</h4>
+						</td>
+						<td>
+							<h4>Banned Users</h4>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div id="admin-list-wrapper">
+								{{#each allowedcurrentusr}}
+									{{> allowedcurrentusrctl}}
+								{{/each}}
+							</div>
+						</td>
+						<td>
+							<div id="admin-list-wrapper">
+								{{#each uninvitedcurrentusr}}
+									{{> uninvitedcurrentusrctl}}
+								{{/each}}
+							</div>
+						</td>
+						<td>
+							<div id="admin-list-wrapper">
+								{{#each bannedcurrentusr}}
+									{{> bannedcurrentusrctl}}
+								{{/each}}
+							</div>
+						</td>
+					</tr>
+				</table>
 
 				<a href="/" class="backtochat">Back to Chat Room</a>
 
