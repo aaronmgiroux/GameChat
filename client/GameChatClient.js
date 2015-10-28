@@ -344,14 +344,13 @@ GameChatClient = {
         return Meteor.users.find({ "status.online": true , _id: {$ne: Meteor.userId()} });
     },
 
-    // TODO Clean this up
     /**
      * @function sendChatMessage
      * @memberof GameChatClient
      * @desc Sends a message from the user to a chat room.
      * @param {Number} roomId - Id of chat room to update with message
      * @param {String} message - Contents of user's message
-     * @returns Update ChatRoom doc if successful, false otherwise
+     * @returns Number of affected documents
      */
     sendChatMessage: function (roomId, message) {
         // Grab user info
@@ -380,5 +379,74 @@ GameChatClient = {
      */
     setCurrentRoomId: function (newCurrentRoomId) {
         Session.set("currentRoomId", newCurrentRoomId);
+    },
+
+    /* Game Functions */
+    // TODO Make these functions available to site admin only
+
+    // TODO Add game images
+    /**
+     * @function addGame
+     * @memberof GameChatClient
+     * @desc Adds game to GameChat DB
+     * @param {String} gameName - Name of game
+     * @param {String} gameDescription - Description of game
+     * @param {String} gameUrl - URL of game
+     * @returns Unique _id of document if successful
+     */
+    addGame: function (gameName, gameDescription, gameUrl) {
+        return Games.insert(
+            {
+                gameName: gameName,
+                gameDescription: gameDescription,
+                gameUrl: gameUrl
+            }
+        );
+    },
+
+    // TODO Remove game images
+    /**
+     * @function removeGame
+     * @memberof GameChatClient
+     * @desc Removes game from GameChat DB
+     * @param {Number} gameId - ID of game document
+     */
+    removeGame: function (gameId) {
+        return Games.remove(gameId);
+    },
+
+    // TODO Update game images
+    /**
+     * @function updateGame
+     * @memberof GameChatClient
+     * @desc Updates game document in GameChat DB
+     * @param {Number} gameId - ID of game document
+     * @param {?String} gameName - Name of game
+     * @param {?String} gameDescription - Description of game
+     * @param {?String} gameUrl - URL of game
+     * @returns {Number} Number of affected documents
+     */
+    updateGame: function (gameId, gameName, gameDescription, gameUrl) {
+        if (gameName != null) {
+            Games.update(gameId, {gameName: gameName});
+        }
+
+        if (gameDescription != null) {
+            Games.update(gameId, {gameDescription: gameDescription});
+        }
+
+        if (gameUrl != null) {
+            Games.update(gameId, {gameUrl : gameUrl});
+        }
+    },
+
+    /**
+     * @function getGames
+     * @memberof GameChatClient
+     * @desc Returns a list of all games for which a chat room can be started.
+     * @returns {Mongo.Cursor} List of all games that can be assigned to a chat room
+     */
+    getGames: function () {
+        return Games.find({});
     }
 };
