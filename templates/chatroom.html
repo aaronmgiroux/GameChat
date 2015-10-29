@@ -53,28 +53,30 @@
 						</td>
 					</tr>
 				<tr>
-					<p style=" padding: 5px 0 0 5px">
-						<li class="{{#if publicchecked}}publicchecked{{/if}}">
-						Public: <input type="checkbox" checked={{publicchecked}} class="toggle-public-checked" />
-						</li>
-					</p>
+				<p style=" padding: 5px 0 0 5px">
+                    <li class="{{#if publicchecked}}publicchecked{{/if}}">
+                    Public: <input type="checkbox" checked={{publicchecked}} class="toggle-public-checked" />
+                    </li>
+                </p>
 				</tr>
 				<tr>
 				<p style=" padding: 5px 0 0 5px">Invite users:</p>
 				</tr>
 				{{#each onlusr}}
 					<tr>
-
 					<li class="{{#if userchecked}}userchecked{{/if}}">
 
-                        <td><span class="text">{{username}}</span></td>
+                        <span class="text">{{username}}</span>
 
-						<td><input type="checkbox" checked={{userchecked}} class="toggle-user-checked" /></td>
+						<input type="checkbox" checked={{userchecked}} class="toggle-user-checked" />
 
 					</li>
 					</tr>
 
 				{{/each}}
+				<tr>
+				
+				</tr>
 				</table>
 				
 				<a href="/chatrooms" class="createroom">Create Room</a>
