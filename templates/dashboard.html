@@ -9,28 +9,32 @@
 			
 			</div>
 		
-			<div id="dashboard-content-wrapper">	
+			<div id="dashboard-content-wrapper">				
 
 				<h1>Dashboard</h1>
 				<hr>
 				
-				<h3>All Users ( {{usercount}} )</h3>
-				<div id="dashboard-list-wrapper">
-					<ul class="allusers">
-						{{#each user}}
-							{{> user_item}}
-						{{/each}}
-					</ul>
-				</div>
-					<h3>All Games ( {{gamecount}} )</h3>				
-				<div id="dashboard-list-wrapper">
-					<ul class="games">
-						{{#each game}}
-							{{> game_item}}
-						{{/each}}
-					</ul>
-				</div>
-				<p> <a href="/gamescreate">Add New Game</a></p>
+				{{#if userisadmin}}
+					<h3>All Users ( {{usercount}} )</h3>
+					<div id="dashboard-list-wrapper">
+						<ul class="allusers">
+							{{#each user}}
+								{{> user_item}}
+							{{/each}}
+						</ul>
+					</div>
+						<h3>All Games ( {{gamecount}} )</h3>				
+					<div id="dashboard-list-wrapper">
+						<ul class="games">
+							{{#each game}}
+								{{> game_item}}
+							{{/each}}
+						</ul>
+					</div>
+					<p> <a href="/gamescreate">Add New Game</a></p>
+				{{else}}
+					<h3>You do NOT have permission to access this page.</h3>
+				{{/if}}
 			</div>
 
 		</div>		
