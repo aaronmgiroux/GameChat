@@ -44,15 +44,20 @@
 				<h1>Create Chat Room</h1>
 				<hr>
 				<table>
+					<tr>
+						<td>
+							<p style=" padding: 5px 0 0 5px">New room name: </p>
+						</td>
+						<td>
+							<input style="width:500px" type="text" id="newroomname">
+						</td>
+					</tr>
 				<tr>
-				<p style=" padding: 5px 0 0 5px">New room name: <input style="width:500px" type="text" id="newroomname"></p>
-				</tr>
-				<tr>
-				<p style=" padding: 5px 0 0 5px">
-                    <li class="{{#if publicchecked}}publicchecked{{/if}}">
-                    Public: <input type="checkbox" checked={{publicchecked}} class="toggle-public-checked" />
-                    </li>
-                </p>
+					<p style=" padding: 5px 0 0 5px">
+						<li class="{{#if publicchecked}}publicchecked{{/if}}">
+						Public: <input type="checkbox" checked={{publicchecked}} class="toggle-public-checked" />
+						</li>
+					</p>
 				</tr>
 				<tr>
 				<p style=" padding: 5px 0 0 5px">Invite users:</p>
@@ -70,10 +75,9 @@
 					</tr>
 
 				{{/each}}
-				<tr>
-				<a href="/chatrooms" class="createroom">Create Room</a>
-				</tr>
 				</table>
+				
+				<a href="/chatrooms" class="createroom">Create Room</a>
 			</div>
 		</div>
 
