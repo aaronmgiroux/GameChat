@@ -44,9 +44,14 @@
 				<h1>Create Chat Room</h1>
 				<hr>
 				<table>
-				<tr>
-				<p style=" padding: 5px 0 0 5px">New room name: <input style="width:500px" type="text" id="newroomname"></p>
-				</tr>
+					<tr>
+						<td>
+							<p style=" padding: 5px 0 0 5px">New room name: </p>
+						</td>
+						<td>
+							<input style="width:500px" type="text" id="newroomname">
+						</td>
+					</tr>
 				<tr>
 				<p style=" padding: 5px 0 0 5px">
                     <li class="{{#if publicchecked}}publicchecked{{/if}}">
@@ -59,21 +64,22 @@
 				</tr>
 				{{#each onlusr}}
 					<tr>
-
 					<li class="{{#if userchecked}}userchecked{{/if}}">
 
-                        <td><span class="text">{{username}}</span></td>
+                        <span class="text">{{username}}</span>
 
-						<td><input type="checkbox" checked={{userchecked}} class="toggle-user-checked" /></td>
+						<input type="checkbox" checked={{userchecked}} class="toggle-user-checked" />
 
 					</li>
 					</tr>
 
 				{{/each}}
 				<tr>
-				<a href="/chatrooms" class="createroom">Create Room</a>
+				
 				</tr>
 				</table>
+				
+				<a href="/chatrooms" class="createroom">Create Room</a>
 			</div>
 		</div>
 
