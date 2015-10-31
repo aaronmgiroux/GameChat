@@ -145,7 +145,8 @@ GameChatClient = {
             accessRegular:[],
             accessBanned:[],
             invited:[],
-            messages:[]
+            messages:[],
+            currentUsers:[]
         });
 
         console.log("createChatRoom(): newChatRoomId=" + newChatRoomId);
@@ -224,7 +225,10 @@ GameChatClient = {
                         + "Removing REGULAR membership for userId "
                         + userId
                     );
-                    userRegularSet = ChatRooms.update(chatRoomId, {$pull:{accessRegular: userId}});
+                    userRegularSet = ChatRooms.update(
+                        chatRoomId,
+                        {$pull:{accessRegular:userId,currentUsers:userId}
+                    });
                 }
                 return userRegularSet;
             case USER_BANNED:
@@ -235,7 +239,10 @@ GameChatClient = {
                         + "Adding USER_BANNED membership for userId "
                         + userId
                     );
-                    userBanSet = ChatRooms.update(chatRoomId, {$push:{accessBanned: userId}});
+                    userBanSet = ChatRooms.update(
+                        chatRoomId,
+                        {$push:{accessBanned:userId},$pull:{currentUsers:userId}
+                    });
                 } else {
                     console.log(
                         "setUserChatRoomAccessLevel(): "
@@ -251,7 +258,9 @@ GameChatClient = {
     },
 
     /**
-     * Create chat room invite for user
+     * @function createChatRoomInvite
+     * @memberof GameChatClient
+     * @desc Create chat room invite for user
      * @param {Number} userId - ID of user
      * @param {Number} chatRoomId - ID of chat room
      * @returns {Number} ID of new ChatRoomInvites doc
@@ -378,7 +387,10 @@ GameChatClient = {
      * @param {Number} newCurrentRoomId - ID of the client's new currently active room
      */
     setCurrentRoomId: function (newCurrentRoomId) {
+        var oldRoomId = GameChatClient.getCurrentRoomId();
         Session.set("currentRoomId", newCurrentRoomId);
+        Meteor.call('leaveChatRoom', oldRoomId);
+        Meteor.call('joinChatRoom', newCurrentRoomId);
     },
 
     /* Game Functions */
