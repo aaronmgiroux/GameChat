@@ -8,15 +8,24 @@
 				{{> sidebar }}
 			
 			</div>
-				<h1 class="room">{{chatroomName}}</h1>
+				<h1 class="room">Home</h1>
 				<hr>
+                <h5>Room: <b>{{chatroomName}}</b></h5>
+                <h5>Game: <b>{{chatroomGame}}</b></h5>
 			<div>
 		
-				<div id="message-content-wrapper">						
+				<div id="message-content-wrapper">
 
 					{{> messages }}
 				
-				</div>	
+				</div>
+
+ 				<div id="currentuser-content-wrapper">
+
+					{{> currentusers }}
+
+				</div>
+
 			</div>
 
 			<div id="input-content-wrapper">	

@@ -13,9 +13,32 @@
 
 				<h1>Games</h1>
 				<hr>
+				
+				<h3>All Games ( {{gamecount}} )</h3>				
+				<div id="dashboard-games-wrapper">
+					<ul class="games">
+						{{#each game}}
+							{{> game_info}}
+						{{/each}}
+					</ul>
+				</div>
 			
 			</div>
 		</div>
+	</div>
+</template>
+
+<template name="game_info">
+	<div style="float:left">
+		<img  src="game_image.png">
+	</div>
+	<div style="float:left; padding-top:10px">
+		<li class="user-item">		
+			<p>	Game Name: <b>{{gameName}}		</b></p>
+			<p>	Game URL: <b>{{gameUrl}}		</b></p>
+			<p>	Game Description: <b>{{gameDescription}}		</b></p>
+			<hr>		
+		</li>
 	</div>
 </template>
 
