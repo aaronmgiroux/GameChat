@@ -29,15 +29,16 @@
 </template>
 
 <template name="game_info">
-	<div style="float:left; width:1000px">
+	<div style="float:left; width:80%">
 		<div style="float:left">
 			<img  src="game_image.png">
 		</div>
 		<div style="float:left; padding-top:10px">
 			<li class="user-item">		
 				<p>	Game Name: <b>{{gameName}}		</b></p>
-				<p>	Game URL: <b>{{gameUrl}}		</b></p>
+				<p>	Game URL: <a href="{{gameUrl}}" target="_blank"><b>{{gameUrl}}		</b></a></p>
 				<p>	Game Description: <b>{{gameDescription}}		</b></p>
+				<p><a href="/#" class="gameinvite">Game Invite</a></p>
 				<hr>		
 			</li>
 		</div>

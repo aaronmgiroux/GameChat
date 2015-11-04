@@ -424,7 +424,7 @@ GameChatClient = {
      * @param {Number} gameId - ID of game document
      */
     removeGame: function (gameId) {
-        return Games.remove(gameId);
+        Games.remove(gameId);
     },
 
     // TODO Update game images
