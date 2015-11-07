@@ -51,9 +51,9 @@
 <template name="game_item">
     <li class="user-item">		
 		<p>
-			Game Id: <b>{{_id}}		</b>
-			Game Name: <b>{{gameName}}		</b>			
 			<a href="/dashboard" class="deletegame">Delete</a>
+			Game Name: <b>{{gameName}}		</b>
+			Game URL: <b>{{gameUrl}}		</b>		
 		</p>
     </li>
 </template>
@@ -61,9 +61,10 @@
 <template name="user_item">
     <li class="user-item">		
 		<p>
-			User Id: <b>{{_id}}		</b>
-			User Name: <b>{{username}}		</b>
 			<a href="/dashboard" class="deleteuser">Delete</a>
+			<b>isAdmin? </b><input type="checkbox" checked={{userisadmin}} class="toggle-user-isadmin" />
+			User Name: <b>{{username}}		</b>
+			User Email: <b>{{emails.[0].address}}		</b>			
 		</p>
     </li>
 </template>
