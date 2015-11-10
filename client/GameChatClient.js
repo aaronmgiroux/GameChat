@@ -18,8 +18,8 @@ GameChatClient = {
      * @function allowUserIntoChatRoom
      * @memberof GameChatClient
      * @desc Allows user into chat room
-     * @param {Number} userId - ID of user
-     * @param {Number} chatRoomId - ID of chat room
+     * @param {String} userId - ID of user
+     * @param {String} chatRoomId - ID of chat room
      */
     allowUserIntoChatRoom: function (userId, chatRoomId) {
         // First put the user into the REGULAR list
@@ -47,8 +47,8 @@ GameChatClient = {
      * @function banUserFromChatRoom
      * @memberof GameChatClient
      * @desc Bans user from chat room.
-     * @param {Number} userId - ID of user
-     * @param {Number} chatRoomId - ID of chat room
+     * @param {String} userId - ID of user
+     * @param {String} chatRoomId - ID of chat room
      */
     banUserFromChatRoom: function (userId, chatRoomId) {
         // First ban the user
@@ -75,12 +75,12 @@ GameChatClient = {
      * @function inviteUserToChatRoom
      * @memberof GameChatClient
      * @desc Invites user to existing chat room and grants them access.
-     * @param {Number} userId - ID of user
-     * @param {Number} chatRoomId - ID of chat room
-     * @param {String} inviteMessage - Message to display in invite
-     * @returns {Number} ID of new ChatRoomInvites doc
+     * @param {String} userId - ID of user
+     * @param {String} chatRoomId - ID of chat room
+     * @param {?String} inviteMessage - Message to display in invite
+     * @returns {String} ID of new ChatRoomInvites doc
      */
-    inviteUserToChatRoom: function (userId, chatRoomId) {
+    inviteUserToChatRoom: function (userId, chatRoomId, inviteMessage) {
         // First put the user into the REGULAR list
         console.log(
             "inviteUserToChatRoom(): Calling setUserChatRoomAccessLevel "
@@ -106,7 +106,7 @@ GameChatClient = {
             + " for chatRoomId "
             + chatRoomId
         );
-        GameChatClient.createChatRoomInvite(userId, chatRoomId)
+        GameChatClient.createChatRoomInvite(userId, chatRoomId, inviteMessage);
     },
 
     /* Chatroom/invite creation functions */
@@ -119,9 +119,11 @@ GameChatClient = {
      * @param {String} roomname - Name of chat room
      * @param {Map} users - usersAccess Map of user ID keys/access values to allow into chat room
      * @param {Map} flags - Configuration options for chatroom (isPublic, etc.)
-     * @returns {Number} ID of ChatRooms doc
+     * @param {?String} gameId - ID of game document (if one is set)
+     * @param {?String} inviteMessage - Inviter message to invitees
+     * @returns {String} ID of ChatRooms doc
      */
-    createChatRoom: function (roomname, users, flags) {
+    createChatRoom: function (roomname, users, flags, gameId, inviteMessage) {
 
         var usersArray = [];
 
@@ -134,19 +136,18 @@ GameChatClient = {
         var newChatRoomId;
 
         // TODO Remove (only used for debugging)
-        console.log("createChatRoom(): calling ChatRooms.insert()");
+        console.log("createChatRoom(): calling Meteor.methods.insert()");
 
-        // TODO Remove default public setting
-        // Create chat room
         newChatRoomId = ChatRooms.insert({
             adminId: Meteor.userId(),
             roomname: roomname,
             isPublic: flags.get('isPublic'),
-            accessRegular:[],
-            accessBanned:[],
-            invited:[],
-            messages:[],
-            currentUsers:[]
+            gameId: gameId,
+            accessRegular: [],
+            accessBanned: [],
+            invited: [],
+            messages: [],
+            currentUsers: []
         });
 
         console.log("createChatRoom(): newChatRoomId=" + newChatRoomId);
@@ -158,6 +159,7 @@ GameChatClient = {
         // TODO Change this to also use values in Map 'users' to set user permissions
         // Create chat room user access levels and invites
         for (var i = 0; i < usersArray.length; i++) {
+
              GameChatClient.setUserChatRoomAccessLevel(
                 usersArray[i][0],
                 newChatRoomId,
@@ -168,7 +170,8 @@ GameChatClient = {
                 = GameChatClient
                 .createChatRoomInvite(
                 usersArray[i][0],
-                newChatRoomId
+                newChatRoomId,
+                inviteMessage
             );
             console.log("Access level for userId "
                 + usersArray[i][0]
@@ -202,8 +205,8 @@ GameChatClient = {
      * or {@link GameChatClient#inviteUserToChatRoom}
      * rather than call this function directly. Those functions will call this one
      * and add/remove the users from each list as appropriate.
-     * @param {Number} userId - ID of user
-     * @param {Number} chatRoomId - ID of chat room
+     * @param {String} userId - ID of user
+     * @param {String} chatRoomId - ID of chat room
      * @param {String} accessLevel - Access level of user (USE ESTABLISHED CONSTANTS)
      * @param {Boolean} add - True for adding user, false for removing user
      * @returns Updated ChatRoom document if set was successful, null otherwise
@@ -261,20 +264,44 @@ GameChatClient = {
      * @function createChatRoomInvite
      * @memberof GameChatClient
      * @desc Create chat room invite for user
-     * @param {Number} userId - ID of user
-     * @param {Number} chatRoomId - ID of chat room
-     * @returns {Number} ID of new ChatRoomInvites doc
+     * @param {String} userId - ID of user
+     * @param {String} chatRoomId - ID of chat room
+     * @param {?String} inviteMessage - Inviter message for invitee
+     * @returns {String} ID of new ChatRoomInvites doc
      */
-    createChatRoomInvite: function (userId, chatRoomId) {
+    createChatRoomInvite: function (userId, chatRoomId, inviteMessage) {
         var inviterName = Meteor.user().username;
+        var inviteGameId = ChatRooms.findOne(chatRoomId).gameId;
+        var newInviteMessage;
+
+        // Create invite message if it hasn't already been created
+        if (inviteMessage == null) {
+            if (inviteGameId != null && Games.findOne(inviteGameId).count() === 1) {
+                newInviteMessage
+                    = Meteor.user().username
+                    + " invites you to play "
+                    + Games.findOne(inviteGameId).gameName;
+            } else {
+                newInviteMessage
+                    = Meteor.user().username
+                    + " has invited you to chat room "
+                    + ChatRooms.findOne(chatRoomId).roomname;
+            }
+        } else {
+            newInviteMessage = ": " + inviteMessage;
+        }
+
+        // Make sure user is in list of invited users
         if (ChatRooms.findOne(chatRoomId).invited.indexOf(userId) === -1) {
             ChatRooms.update(chatRoomId, {$push:{invited:userId}});
         }
+
         return ChatRoomsInvites
             .insert({
                 userId: userId,
                 chatRoomId: chatRoomId,
-                inviterName: inviterName
+                inviterName: inviterName,
+                inviteMessage: newInviteMessage
             }
         );
     },
@@ -337,7 +364,7 @@ GameChatClient = {
      * @function getCurrentRoomId
      * @memberof GameChatClient
      * @desc Returns the ID of the client's currently active chat room
-     * @returns {Number} ID of client's currently active chat room
+     * @returns {String} ID of client's currently active chat room
      */
     getCurrentRoomId: function () {
         return Session.get("currentRoomId")
@@ -346,7 +373,8 @@ GameChatClient = {
     /**
      * @function getOnlineUsers
      * @memberof GameChatClient
-     * @desc Returns a list of all users that are currently online.
+     * @desc Returns a list of all users (other than the calling one)
+     * that are currently online.
      * @returns {Mongo.Cursor} List of all users that are currently online
      */
     getOnlineUsers: function () {
@@ -357,34 +385,19 @@ GameChatClient = {
      * @function sendChatMessage
      * @memberof GameChatClient
      * @desc Sends a message from the user to a chat room.
-     * @param {Number} roomId - Id of chat room to update with message
+     * @param {String} roomId - Id of chat room to update with message
      * @param {String} message - Contents of user's message
-     * @returns Number of affected documents
+     * @returns {Number} 1 if successful, 0 otherwise
      */
     sendChatMessage: function (roomId, message) {
-        // Grab user info
-        var messageUserName = Meteor.user().username;
-        var messageDate = Date.now();
-
-        return ChatRooms.update(
-            roomId,
-            {$push:
-                {messages:
-                    {
-                        name: messageUserName,
-                        text: message,
-                        createdAt: messageDate
-                    }
-                }
-            }
-        );
+        Meteor.call('sendNewChatMessage', roomId, message);
     },
 
     /**
      * @function setCurrentRoomId
      * @memberof GameChatClient
      * @desc Sets the ID of the client's currently active room
-     * @param {Number} newCurrentRoomId - ID of the client's new currently active room
+     * @param {String} newCurrentRoomId - ID of the client's new currently active room
      */
     setCurrentRoomId: function (newCurrentRoomId) {
         var oldRoomId = GameChatClient.getCurrentRoomId();
@@ -421,7 +434,7 @@ GameChatClient = {
      * @function removeGame
      * @memberof GameChatClient
      * @desc Removes game from GameChat DB
-     * @param {Number} gameId - ID of game document
+     * @param {String} gameId - ID of game document
      */
     removeGame: function (gameId) {
         Games.remove(gameId);
@@ -432,7 +445,7 @@ GameChatClient = {
      * @function updateGame
      * @memberof GameChatClient
      * @desc Updates game document in GameChat DB
-     * @param {Number} gameId - ID of game document
+     * @param {String} gameId - ID of game document
      * @param {?String} gameName - Name of game
      * @param {?String} gameDescription - Description of game
      * @param {?String} gameUrl - URL of game
@@ -460,5 +473,33 @@ GameChatClient = {
      */
     getGames: function () {
         return Games.find({});
+    },
+
+    // TODO THIS IS HORRIBLE FIX IT
+    /**
+     * @function userIsAdmin
+     * @memberof GameChatClient
+     * @desc Returns true/false if the user is/is not an admin.
+     * @returns {Boolean} True if user is admin, false otherwise
+     */
+    userIsAdmin:function () {
+        var gameChatClientSiteAdminIds = [];
+        if (Meteor.users.find({username:"dnsulliv"}).count() === 1) {
+            gameChatClientSiteAdminIds.push(Meteor.users.findOne({username:"dnsulliv"})._id);
+        }
+
+        if (Meteor.users.find({username:"aaron"}).count() === 1) {
+            gameChatClientSiteAdminIds.push(Meteor.users.findOne({username:"aaron"})._id);
+        }
+		
+		if (Meteor.users.find({username:"admin"}).count() === 1) {
+            gameChatClientSiteAdminIds.push(Meteor.users.findOne({username:"admin"})._id);
+        }
+
+        if (gameChatClientSiteAdminIds.indexOf(Meteor.userId()) !== -1) {
+            return true;
+        } else {
+            return false;
+        }
     }
 };
