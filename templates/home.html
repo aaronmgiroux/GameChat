@@ -8,12 +8,13 @@
 				{{> sidebar }}
 			
 			</div>
-				<h1 class="room">Chat Room: <b>{{chatroomName}}</b></h1>
-                {{#if hasGame}}
-                    <h3>Game: <b>{{chatroomGameName}}</b> - <a href={{chatroomGameUrl}} target="_blank">{{chatroomGameUrl}}</a>
-                    </h3>
-                {{/if}}
+				<h1 class="room">Chat Room: <b>{{chatroomName}}</b></h1>                
 				<hr class="style-four">
+				{{#if hasGame}}
+                    <p style="margin-top:20px">
+						Game: <b>{{chatroomGameName}}</b> - <a href={{chatroomGameUrl}} target="_blank">{{chatroomGameUrl}}</a>
+                    </p>
+                {{/if}}
 			<div>
 		
 				<div id="message-content-wrapper">
