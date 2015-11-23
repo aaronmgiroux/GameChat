@@ -276,15 +276,13 @@ GameChatClient = {
 
         // Create invite message if it hasn't already been created
         if (inviteMessage == null) {
-            if (inviteGameId != null && Games.findOne(inviteGameId).count() === 1) {
+            if (inviteGameId != null && Games.find({_id: inviteGameId}).count() === 1) {
                 newInviteMessage
-                    = Meteor.user().username
-                    + " invites you to play "
+                    = " invites you to play "
                     + Games.findOne(inviteGameId).gameName;
             } else {
                 newInviteMessage
-                    = Meteor.user().username
-                    + " has invited you to chat room "
+                    = " has invited you to chat room "
                     + ChatRooms.findOne(chatRoomId).roomname;
             }
         } else {
