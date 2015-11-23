@@ -26,6 +26,7 @@ GameChatServer = {
         )
     },
 
+    // TODO Highly insecure and brittle - Need to update this to use config files
     /**
      * @function userIsAdmin
      * @memberof GameChatServer
@@ -34,11 +35,15 @@ GameChatServer = {
      * @returns {Boolean} True is user is admin, false otherwise
      */
     userIsAdmin: function(userId) {
-        return ["M84pw9kiKEp3BAPXm", "ubyfrT7eEXiZtix6n"].indexOf(userId) !== -1;
+        return (
+            Meteor.users.findOne(userId).username == 'dnsulliv'
+            ||
+            Meteor.users.findOne(userId).username == 'aaron'
+            ||
+            Meteor.users.findOne(userId).username == 'admin'
+        );
     }
 };
-
-
 
 Meteor.startup(function() {
 
@@ -56,8 +61,7 @@ Meteor.startup(function() {
             currentUsers:[]
     });
 
-    // TODO THIS IS REALLY BAD -> Replace with proper permissions system
-    // Create initial site admin
+    // TODO Create initial site admins using config file
 
     ChatRooms.allow({
 
@@ -71,9 +75,7 @@ Meteor.startup(function() {
             // Allow users to modify chat rooms that they create
             // (except for messages: even chat admins should have to go through Meteor.methods)
             // Allow server to modify chat room
-            if ((doc.adminId === userId && fieldNames.indexOf('messages') === -1)
-                ||
-                Meteor.isServer) {
+            if (doc.adminId === userId && fieldNames.indexOf('messages') === -1) {
                 return true;
             }
 
@@ -113,15 +115,15 @@ Meteor.startup(function() {
     Games.allow({
 
         'insert': function(userId, doc) {
-            return true;
+            return GameChatServer.userIsAdmin(userId);
         },
 
         'update': function(userId, doc, fieldNames, modifier) {
-            return true;
+            return GameChatServer.userIsAdmin(userId);
         },
 
         'remove': function(userId, doc) {
-            return true;
+            return GameChatServer.userIsAdmin(userId);
         }
 
     });
@@ -204,5 +206,16 @@ Meteor.startup(function() {
                 return 0;
             }
         }
+
+        // TODO
+        /* ===== Friend Methods ===== */
+
+        /**
+         * @function sendFriendRequest
+         * @memberof Meteor.methods
+         * @desc Places a friend request in the Invites queue
+         * @param
+         * @param
+         */
     });
 });

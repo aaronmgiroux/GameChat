@@ -387,7 +387,6 @@ GameChatClient = {
      * @desc Sends a message from the user to a chat room.
      * @param {String} roomId - Id of chat room to update with message
      * @param {String} message - Contents of user's message
-     * @returns {Number} 1 if successful, 0 otherwise
      */
     sendChatMessage: function (roomId, message) {
         Meteor.call('sendNewChatMessage', roomId, message);
@@ -449,7 +448,6 @@ GameChatClient = {
      * @param {?String} gameName - Name of game
      * @param {?String} gameDescription - Description of game
      * @param {?String} gameUrl - URL of game
-     * @returns {Number} Number of affected documents
      */
     updateGame: function (gameId, gameName, gameDescription, gameUrl) {
         if (gameName != null) {
@@ -475,7 +473,7 @@ GameChatClient = {
         return Games.find({});
     },
 
-    // TODO THIS IS HORRIBLE FIX IT
+    // TODO Replace with check against list of names loaded from config file on server
     /**
      * @function userIsAdmin
      * @memberof GameChatClient
