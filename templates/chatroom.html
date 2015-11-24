@@ -16,12 +16,12 @@
 				<div id="dashboard-list-wrapper">
 					<ul>
 						{{#each chatrooms}}
-							{{> roomlink}}
+							<h4>{{> roomlink}}</h4>
 						{{/each}}
 					</ul>						
 				</div>
 				
-				<a class="button" style="float: left; margin-right: 40%" href="/chatroomscreate" id="newroom">New Chat Room</a>
+				<a class="button" style="float: left; margin-right: 40%; margin: 15px 0 0 0;" href="/chatroomscreate" id="newroom">New Chat Room</a>
 			</div>	
 		</div>
 		
@@ -42,7 +42,7 @@
 			<div id="dashboard-content-wrapper">
 			
 				<h1>Create Chat Room</h1>
-				<hr>
+				<hr class="style-four">
 				<table>
                     {{#if hasgame}}
                     <tr>
@@ -53,27 +53,27 @@
                     {{/if}}
 					<tr>
 						<td>
-							<p style=" padding: 5px 0 0 5px">New room name: </p>
+							<h4 style=" padding: 5px 0 0 5px">New room name: </h4>
 						</td>
 						<td>
-							<input style="width:500px" type="text" id="newroomname">
+							<input style="width:500px; height:30px; background:#efefef" type="text" id="newroomname">
 						</td>
 					</tr>
 				<tr>
-				<p style=" padding: 5px 0 0 5px">
+				<h4 style=" padding: 5px 0 0 20px">
                     <li class="{{#if publicchecked}}publicchecked{{/if}}">
                     Public: <input type="checkbox" checked={{publicchecked}} class="toggle-public-checked" />
                     </li>
-                </p>
+                </h4>
 				</tr>
 				<tr>
-				<p style=" padding: 5px 0 0 5px">Invite users:</p>
+				<h4 style=" padding: 5px 0 0 20px" >Invite users:</h4>
 				</tr>
 				{{#each onlusr}}
 					<tr>
 					<li class="{{#if userchecked}}userchecked{{/if}}">
 
-                        <span class="text">{{username}}</span>
+                        <h4><span class="text">{{username}}</span></h4>
 
 						<input type="checkbox" checked={{userchecked}} class="toggle-user-checked" />
 
@@ -107,18 +107,18 @@
 			<div id="dashboard-content-wrapper">
 
 				<h1>Access Control</h1>
-				<hr>
+				<hr class="style-four">
 				
 				<table>
 					<tr>
 						<td>
-							<h4>Allowed Users</h4>
+							<h3>Allowed Users</h3>
 						</td>
 						<td>
-							<h4>Uninvited Users</h4>
+							<h3>Uninvited Users</h3>
 						</td>
 						<td>
-							<h4>Banned Users</h4>
+							<h3>Banned Users</h3>
 						</td>
 					</tr>
 					<tr>
@@ -165,7 +165,7 @@
 
     <li class="allowedusritem">
         <p>
-            {{username}} <input type="button" class="banuser" value="Ban"/>
+            <b style="color: #777777; font-size:20px">{{username}}</b> <a href="/" class="banuser button" value="Ban">Ban</a>
         </p>
     </li>
 
@@ -175,7 +175,7 @@
 
     <li class="allowedusritem">
         <p>
-            {{username}} <input type="button" class="inviteuser" value="Invite"/>
+            <b style="color: #777777; font-size:20px">{{username}}</b> <a href="/" class="inviteuser button" value="Invite">Invite</a>
         </p>
     </li>
 
@@ -185,7 +185,7 @@
 
     <li class="allowedusritem">
         <p>
-            {{username}} <input type="button" class="unbanuser" value="Unban"/>
+            <b style="color: #777777; font-size:20px">{{username}}</b> <a href="/" class="unbanuser button" value="Unban">UnBan</a>
         </p>
     </li>
 
