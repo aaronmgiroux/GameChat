@@ -471,31 +471,33 @@ GameChatClient = {
         return Games.find({});
     },
 
-    // TODO Replace with check against list of names loaded from config file on server
+    /* ===== Admin functions ===== */
+
     /**
      * @function userIsAdmin
      * @memberof GameChatClient
      * @desc Returns true/false if the user is/is not an admin.
+     * @param {String} userId - ID of user to check for admin status
      * @returns {Boolean} True if user is admin, false otherwise
      */
-    userIsAdmin:function () {
-        var gameChatClientSiteAdminIds = [];
-        if (Meteor.users.find({username:"dnsulliv"}).count() === 1) {
-            gameChatClientSiteAdminIds.push(Meteor.users.findOne({username:"dnsulliv"})._id);
-        }
+    userIsAdmin:function (userId) {
+        return Meteor.users.findOne(userId).isAdmin;
+    },
 
-        if (Meteor.users.find({username:"aaron"}).count() === 1) {
-            gameChatClientSiteAdminIds.push(Meteor.users.findOne({username:"aaron"})._id);
-        }
-		
-		if (Meteor.users.find({username:"admin"}).count() === 1) {
-            gameChatClientSiteAdminIds.push(Meteor.users.findOne({username:"admin"})._id);
-        }
-
-        if (gameChatClientSiteAdminIds.indexOf(Meteor.userId()) !== -1) {
-            return true;
+    /**
+     * @function toggleUserAdmin
+     * @memberof GameChatClient
+     * @desc Toggles the admin status of another user. User MUST be admin.
+     * @param {String} userId - ID of user for whom to toggle admin status
+     */
+    toggleUserAdmin: function (userId) {
+        var currentStatus = Meteor.users.findOne(userId).isAdmin;
+        var newStatus;
+        if (currentStatus === null || currentStatus === undefined || currentStatus === false) {
+            newStatus = true;
         } else {
-            return false;
+            newStatus = false;
         }
+        Meteor.users.update(userId, {$set:{isAdmin:newStatus}});
     }
 };
