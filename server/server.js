@@ -111,13 +111,6 @@ Meteor.startup(function() {
             currentUsers:[]
     });
 
-    // TODO Create initial site admins using config file
-    GameChatServer.createInitAdmin(
-        Meteor.settings.initadmin_username.toString(),
-        Meteor.settings.initadmin_password.toString(),
-        Meteor.settings.initadmin_email.toString()
-    );
-
     // TODO Prevent users from generating their own _id
     ChatRooms.allow({
 
@@ -304,7 +297,6 @@ Meteor.startup(function() {
             }
         },
 
-        // TODO
         /* ===== Friend Methods ===== */
 
         /**
@@ -402,6 +394,7 @@ Meteor.startup(function() {
 
         /**
          * @function acceptFriendRequest
+         * @memberof Meteor.methods
          * @desc Accept a friend request
          * @param {String} friendId - ID of new friend
          */
@@ -425,6 +418,7 @@ Meteor.startup(function() {
 
         /**
          * @function denyFriendRequest
+         * @memberof Meteor.methods
          * @desc Deny a friend request
          * @param {String} notFriendId - ID of friend requester being denied
          */
@@ -442,6 +436,7 @@ Meteor.startup(function() {
         /* ===== Admin Functions ===== */
         /**
          * @function deleteAccount
+         * @memberof Meteor.methods
          * @desc Delete a user account.
          * @param {String} userId - ID of account to delete
          */
@@ -452,6 +447,25 @@ Meteor.startup(function() {
                 if (GameChatServer.userIsAdmin(this.userId)) {
                     Meteor.users.remove(userId);
                 }
+            }
+        },
+
+        /**
+         * @function toggleUserAdmin
+         * @memberof Meteor.methods
+         * @desc Toggles the admin status of another user. User MUST be admin.
+         * @param {String} userId - ID of user for whom to toggle admin status
+         */
+        toggleUserAdmin: function (userId) {
+            if (GameChatServer.userIsAdmin(this.userId) && GameChatServer.initadminId !== userId) {
+                var currentStatus = Meteor.users.findOne(userId).isAdmin;
+                var newStatus;
+                if (currentStatus === null || currentStatus === undefined || currentStatus === false) {
+                    newStatus = true;
+                } else {
+                    newStatus = false;
+                }
+                Meteor.users.update(userId, {$set:{isAdmin:newStatus}});
             }
         }
     });

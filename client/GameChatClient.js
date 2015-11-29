@@ -518,14 +518,7 @@ GameChatClient = {
      * @param {String} userId - ID of user for whom to toggle admin status
      */
     toggleUserAdmin: function (userId) {
-        var currentStatus = Meteor.users.findOne(userId).isAdmin;
-        var newStatus;
-        if (currentStatus === null || currentStatus === undefined || currentStatus === false) {
-            newStatus = true;
-        } else {
-            newStatus = false;
-        }
-        Meteor.users.update(userId, {$set:{isAdmin:newStatus}});
+        Meteor.call('toggleUserAdmin', userId);
     },
 
     /**
