@@ -123,7 +123,8 @@ Meteor.startup(function() {
 
             // Allow users to modify chat rooms that they create
             // (except for messages: even chatroom admins should have to go through Meteor.methods)
-            if (doc.adminId === userId && fieldNames.indexOf('messages') === -1) {
+            if ((doc.adminId === userId || GameChatServer.userIsAdmin(userId))
+                && fieldNames.indexOf('messages') === -1) {
                 return true;
             }
 

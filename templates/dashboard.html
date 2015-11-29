@@ -62,7 +62,8 @@
     <li class="user-item">		
 		<p>
 			<a href="/dashboard" class="deleteuser">Delete</a>
-			<b>isAdmin? </b><input type="checkbox" checked={{useradmincheck}} class="toggle-user-isadmin" />
+			<b>isAdmin? </b>{{#if useradmincheck}}Yes{{else}}<em>No</em>{{/if}}
+            <a href="/dashboard" class="toggle-user-isadmin">Toggle Admin</a>
 			User Name: <b>{{username}}		</b>
 			User Email: <b>{{emails.[0].address}}		</b>			
 		</p>
