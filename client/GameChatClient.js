@@ -286,7 +286,7 @@ GameChatClient = {
                     + ChatRooms.findOne(chatRoomId).roomname;
             }
         } else {
-            newInviteMessage = ": " + inviteMessage;
+            newInviteMessage = " " + inviteMessage;
         }
 
         // Make sure user is in list of invited users
@@ -315,7 +315,6 @@ GameChatClient = {
         return ChatRooms.find({});
     },
 
-    // TODO Clean this up
     /**
      * @function getChatRoomsInvites
      * @memberof GameChatClient
@@ -373,10 +372,38 @@ GameChatClient = {
      * @memberof GameChatClient
      * @desc Returns a list of all users (other than the calling one)
      * that are currently online.
+     * NOTE: Sending identical values for both params will cancel both filters
+     * @param {Boolean} filterFriends - If true, remove users that are in Friends list
+     * @param {Boolean} filterNotFriends - If true, remove users that are NOT in Friends list
      * @returns {Mongo.Cursor} List of all users that are currently online
      */
-    getOnlineUsers: function () {
-        return Meteor.users.find({ "status.online": true , _id: {$ne: Meteor.userId()} });
+    getOnlineUsers: function (filterFriends, filterNotFriends) {
+
+        if (filterFriends === filterNotFriends) {
+            return Meteor.users.find({"status.online": true,_id:{$ne: Meteor.userId()}});
+        }
+        if (filterFriends === true) {
+            return Meteor.users.find(
+                {
+                    $and:
+                        [
+                            {"status.online":true},
+                            {_id:{$ne:Meteor.userId()}},
+                            {_id:{$nin:Friends.findOne({userId:Meteor.userId()}).friends}}
+                        ]
+                }
+            );
+        }
+        return Meteor.users.find(
+            {
+                $and:
+                    [
+                        {"status.online":true},
+                        {_id:{$ne:Meteor.userId()}},
+                        {_id:{$in:Friends.findOne({userId:Meteor.userId()}).friends}}
+                    ]
+            }
+        );
     },
 
     /**
@@ -499,5 +526,55 @@ GameChatClient = {
             newStatus = false;
         }
         Meteor.users.update(userId, {$set:{isAdmin:newStatus}});
+    },
+
+    /**
+     * @function deleteAccount
+     * @desc Delete a user account
+     * @param {userId} - ID of user account to delete
+     */
+    deleteAccount: function (userId) {
+        Meteor.call('deleteAccount', userId);
+    },
+
+    /* ===== Friend functions ===== */
+    /**
+     * @function sendFriendRequest
+     * @desc Send a friend request
+     * @param {String} friendUserId - ID of user to which request will be sent
+     */
+    sendFriendRequest: function (friendUserId) {
+        console.log("sendFriendRequest(): now running on client");
+        Meteor.call('sendFriendRequest', friendUserId);
+    },
+
+    /**
+     * @function acceptFriendRequest
+     * @desc Accept a friend request
+     * @param {String} friendInviteId - ID of friend request invite
+     */
+    acceptFriendRequest: function (friendInviteId) {
+        var inviterUserId
+            = Meteor.users
+            .findOne({username:ChatRoomsInvites.findOne(friendInviteId).inviterName})
+            ._id;
+        ChatRoomsInvites.remove(friendInviteId);
+        Meteor.call('acceptFriendRequest', inviterUserId);
+    },
+
+    /**
+     * @function denyFriendRequest
+     * @desc Deny a friend request
+     * @param {String} notFriendInviteId - ID of friend request invite
+     */
+    denyFriendRequest: function (notFriendInviteId) {
+        console.log("GameChatClient.denyFriendRequest(): now running");
+        var inviterUserId
+            = Meteor.users
+            .findOne({username:ChatRoomsInvites.findOne(notFriendInviteId).inviterName})
+            ._id;
+        ChatRoomsInvites.remove(notFriendInviteId);
+        Meteor.call('denyFriendRequest', inviterUserId);
     }
+
 };

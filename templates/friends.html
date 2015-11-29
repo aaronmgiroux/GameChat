@@ -1,0 +1,67 @@
+<template name="friendspage">
+    <div id="wrapper">		
+
+		<div id="page-content-wrapper">		
+		
+			<div id="sidebar-content-wrapper">
+
+				{{> sidebar }}
+			
+			</div>
+		
+			<div id="dashboard-content-wrapper">				
+
+				<h1>Friends</h1>
+				<hr class="style-four">
+				
+				<h3>My Friends ( {{friendusercount}} )</h3>
+				<div id="dashboard-list-wrapper">
+					<ul class="friendusers">
+						{{#each frienduser}}
+								{{> frienduser_item}}
+						{{/each}}
+					</ul>
+				</div>
+				<div>
+					<div style="float:left">
+						<h3>Other Users ( {{otherusercount}} )</h3>
+					</div>
+				</div>
+				<div id="dashboard-list-wrapper">
+					<ul class="otheruser">
+						{{#each otheruser}}
+							{{> otheruser_item}}
+						{{/each}}
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+
+<template name="frienduser_item">
+    <li class="user-item">		
+		<p>
+			Friend Name: <b>{{username}}		</b>
+			Friend Email: <b>{{emails.[0].address}}		</b>
+		</p>
+    </li>
+</template>
+
+<template name="otheruser_item">
+    <li class="user-item">		
+		<p>
+            User Name: <b>{{username}}		</b>
+            User Email: <b>{{emails.[0].address}}		</b>
+			{{#if hasrequest}}
+                {{#if requestpending}}
+                    Friend request pending
+                {{else}}
+                    <em>Friend request denied</em>
+                {{/if}}
+            {{else}}
+                <a href="/friends" class="sendfriendrequest">Send Friend Request</a>
+            {{/if}}
+		</p>
+    </li>
+</template>

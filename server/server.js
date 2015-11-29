@@ -14,7 +14,7 @@ GameChatServer = {
      * @param {String} chatRoomId - Mongo ID of chat room
      * @param {String} userId - Mongo ID of user
      */
-    checkChatRoomPermission: function (chatRoomId, userId) {
+    checkChatRoomPermission: function(chatRoomId, userId) {
         var doc = ChatRooms.findOne(chatRoomId);
 
         return (
@@ -118,12 +118,12 @@ Meteor.startup(function() {
         Meteor.settings.initadmin_email.toString()
     );
 
+    // TODO Prevent users from generating their own _id
     ChatRooms.allow({
 
-        // TODO Prevent users from generating their own _id
         'insert': function(userId, doc){
             //Do not allow chat room admins to insert messages themselves
-            return doc.messages.length === 0;
+            return doc.messages.length === 0 && doc.adminId === userId;
         },
 
         'update': function(userId, doc, fieldNames, modifier){
@@ -138,6 +138,7 @@ Meteor.startup(function() {
             return false;
         },
 
+        // Allow chat room admin and site admins to remove rooms
         'remove':function(userId,doc){
             return doc.adminId === userId || GameChatServer.userIsAdmin(userId);
         }
@@ -150,20 +151,26 @@ Meteor.startup(function() {
     ChatRoomsInvites.allow({
 
         'insert': function(userId, doc) {
-            return doc.inviterName === Meteor.users.findOne(userId).username;
+            /* Require invites inserted directly by user to be in user's name
+             * and only for chat room invites (friend requests must go through server)
+             */
+            return (doc.inviterName === Meteor.users.findOne(userId).username
+                    &&
+                    doc.chatRoomId != null);
         },
 
+        // No need to update an existing invite at this time
         'update': function(userId, doc, fieldNames, modifier) {
-            return doc.userId === userId;
+            return false;
         },
 
+        // Allow users to remove invites sent to them
         'remove': function(userId, doc) {
             return doc.userId === userId;
         }
 
     });
 
-    // TODO Limit access to site admin(s)
     Games.allow({
 
         'insert': function(userId, doc) {
@@ -178,6 +185,22 @@ Meteor.startup(function() {
             return GameChatServer.userIsAdmin(userId);
         }
 
+    });
+
+    // TODO Correct permissions
+    Friends.allow({
+
+        'insert': function(userId, doc) {
+            return false;
+        },
+
+        'update': function(userId, doc, fieldNames, modifier) {
+            return false;
+        },
+
+        'remove': function(userId, doc) {
+            return false;
+        }
     });
 
     Meteor.users.allow({
@@ -199,10 +222,10 @@ Meteor.startup(function() {
             }
 
             if (doc._id === userId) {
-                // Don't allow normal users to change anyone's admin status
-                // Don't allow init admin to demote themselves through web interface
                 if (fieldNames.indexOf('isAdmin') !== -1) {
+                    // Don't allow init admin to demote themselves through web interface
                     if (doc._id !== GameChatServer.initadminId) {
+                        // Don't allow normal users to change anyone's admin status
                         return GameChatServer.userIsAdmin(userId);
                     } else {
                         return false;
@@ -217,13 +240,9 @@ Meteor.startup(function() {
             return GameChatServer.userIsAdmin(userId) && doc._id !== GameChatServer.initadminId;
         },
 
+        // Only allow account deletions through Meteor.methods
         'remove': function(userId, doc) {
-            // Only let admins remove user accounts
-            if (doc._id == GameChatServer.initadminId || doc._id === GameChatServer.initadminId) {
-                return false;
-            } else {
-                return GameChatServer.userIsAdmin(userId);
-            }
+            return false;
         }
     });
 
@@ -283,7 +302,7 @@ Meteor.startup(function() {
             } else {
                 return 0;
             }
-        }
+        },
 
         // TODO
         /* ===== Friend Methods ===== */
@@ -292,8 +311,148 @@ Meteor.startup(function() {
          * @function sendFriendRequest
          * @memberof Meteor.methods
          * @desc Places a friend request in the Invites queue
-         * @param
-         * @param
+         * @param {String} friendUserId - ID of user for which to create request
          */
+        sendFriendRequest: function (friendUserId) {
+            console.log("Meteor.methods.sendFriendRequest(): Now running");
+            var requesterDocId = null;
+
+            // Make sure this user actually exists
+            if (Meteor.users.find(friendUserId).count() === 0) {
+                console.log("Meteor.methods.sendFriendRequest(): " +
+                            + "friendUserId does not exist, returning");
+                return;
+            }
+
+            // Create Friends doc for requestor if it doesn't already exist
+            if (Friends.find({userId:this.userId}).count() === 0) {
+                console.log("Meteor.methods.sendFriendRequest(): "
+                            + "Creating Friends list for requester userId "
+                            + this.userId);
+                requesterDocId = Friends.insert(
+                    {
+                        userId:this.userId,
+                        requestsOpen:[],
+                        requestsDenied:[],
+                        friends:[]
+                    }
+                );
+            } else {
+                requesterDocId = Friends.findOne({userId:this.userId})._id;
+                console.log("Meteor.methods.sendFriendRequest(): "
+                            + "Friends list for requester exists and has id "
+                            + friendUserId);
+            }
+
+            // Create Friends doc for requestee if it doesn't already exist
+            if (Friends.find({userId:friendUserId}).count() === 0) {
+                console.log("Meteor.methods.sendFriendRequest(): "
+                            + "Creating Friends list for requestee userId "
+                            + friendUserId);
+                Friends.insert(
+                    {
+                        userId:friendUserId,
+                        requestsOpen:[],
+                        requestsDenied:[],
+                        friends:[]
+                    }
+                );
+            }
+
+            /* Create friend request if the following criteria are met:
+             *
+             * 1. User is not already a Friend of the requestee
+             * 2. User has not already created a Friend request for this requestee
+             * 3. Requestee has not already denied a friend requests for this user
+             */
+
+            if (Friends.findOne(requesterDocId).friends.indexOf(friendUserId === -1)
+                &&
+                Friends.findOne(requesterDocId).requestsOpen.indexOf(friendUserId) === -1
+                &&
+                Friends.findOne(requesterDocId).requestsDenied.indexOf(friendUserId) === -1) {
+
+                console.log("Meteor.methods.sendFriendRequest(): "
+                            + "Creating Friend request invite for requestee userId "
+                            + friendUserId);
+                ChatRoomsInvites.insert(
+                    {
+                        userId:friendUserId,
+                        chatRoomId:null,
+                        inviterName:Meteor.users.findOne(this.userId).username,
+                        inviteMessage:" wants to be your friend"
+                    }
+                );
+                console.log("Meteor.methods.sendFriendRequest(): "
+                    + "Adding friendUserId "
+                    + friendUserId
+                    + " to userId "
+                    + this.userId
+                    + " requestsOpen list");
+                Friends.update({userId:this.userId},{$push:{requestsOpen:friendUserId}});
+            } else {
+                console.log("Meteor.methods.sendFriendRequest(): "
+                + "Friend request from "
+                + this.userId
+                + " for user "
+                + friendUserId
+                + " already exists");
+            }
+        },
+
+        /**
+         * @function acceptFriendRequest
+         * @desc Accept a friend request
+         * @param {String} friendId - ID of new friend
+         */
+        acceptFriendRequest: function (friendId) {
+
+            console.log("Meteor.methods.acceptFriendRequest(): Now running");
+
+            // Add acceptee's userId to accepter's friends list
+            Friends.update({userId:this.userId},{$push:{friends:friendId}});
+
+            // Add accepter's userId to acceptee's friends list
+            Friends.update({userId:friendId},{$push:{friends:this.userId}});
+
+            // Remove request from accepter's open requests list
+            Friends.update({userId:friendId},{$pull:{requestsOpen:this.userId}});
+
+            // Remove any request denials from history
+            Friends.update({userId:friendId},{$pull:{requestsDenied:this.userId}});
+            Friends.update({userId:this.userId},{$pull:{requestsDenied:friendId}});
+        },
+
+        /**
+         * @function denyFriendRequest
+         * @desc Deny a friend request
+         * @param {String} notFriendId - ID of friend requester being denied
+         */
+        denyFriendRequest: function (notFriendId) {
+
+            console.log("Meteor.methods.denyFriendRequest(): Now running");
+
+            // Remove request from requester's open request list
+            Friends.update({userId:notFriendId},{$pull:{requestsOpen:this.userId}});
+
+            // Put requestee's userId into denied requests list of requester
+            Friends.update({userId:notFriendId},{$push:{requestsDenied:this.userId}});
+        },
+
+        /* ===== Admin Functions ===== */
+        /**
+         * @function deleteAccount
+         * @desc Delete a user account.
+         * @param {String} userId - ID of account to delete
+         */
+        deleteAccount: function (userId) {
+            // Do not allow the init admin to be deleted
+            if (userId !== GameChatServer.initadminId) {
+                // Only let admins remove user accounts
+                if (GameChatServer.userIsAdmin(this.userId)) {
+                    Meteor.users.remove(userId);
+                }
+            }
+        }
     });
 });

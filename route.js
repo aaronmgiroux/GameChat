@@ -33,6 +33,11 @@ Router.route('/chatroomsadmin', function () {
   this.layout('mainNav');
 });
 
+Router.route('/friends', function () {
+  this.render('friendspage');
+  this.layout('mainNav');
+});
+
 Router.route('/dashboard', function () {
   this.render('dashboardpage');
   this.layout('mainNav');
