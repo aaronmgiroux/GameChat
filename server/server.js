@@ -87,6 +87,7 @@ GameChatServer = {
         } else { // Set id of initadmin if it already exists
             GameChatServer.initadminId
                 = Meteor.users.findOne({username: Meteor.settings.initadmin_username})._id;
+            Meteor.users.findOne(GameChatServer.initadminId).isAdmin = true;
             console.log("createInitAdmin: User in settings already exists."
                 + " Init admin id has been set to userId of this account - "
                 + GameChatServer.initadminId
