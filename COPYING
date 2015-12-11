@@ -1,4 +1,3 @@
-/**
  Copyright (c) <2015> <copyright Martin Agents, David Chong, Aaron Giroux, Geoffrey Scofield, Daniel Sullivan, >
 
 
@@ -21,11 +20,3 @@
  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
-
- */
-// Create the init admin
-GameChatServer.createInitAdmin(
-    Meteor.settings.initadmin_username.toString(),
-    Meteor.settings.initadmin_password.toString(),
-    Meteor.settings.initadmin_email.toString()
-);
